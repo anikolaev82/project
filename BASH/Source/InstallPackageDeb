@@ -1,0 +1,14 @@
+#!/bin/bash
+
+sudo dpkg -i $*
+if [ ! $PIPESTATUS[1] ] 
+then
+    echo "При установке пакета возникли проблемы, пробуем исправить"
+    sudo apt-get install -f -y
+fi
+if [ $PIPESTATUS[1] ]
+then
+    echo "Пакет успешно установлен"
+else
+    echo "Пакет не установлен"
+fi

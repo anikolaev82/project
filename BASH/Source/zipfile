@@ -1,0 +1,25 @@
+#!/bin/bash
+
+arc_file=$1
+nolog="nolog"
+if [ -f $1 ] 
+then
+    type_arc="файла"
+elif [ -d $1 ] 
+then
+    type_arc="каталога"
+fi
+echo "Запущено архивирование " $type_arc " "  $arc_file
+if ( ! [ -f $1 ] ) && ( ! [ -d $1 ] )
+then
+    echo "Такого файла или каталога не существует"
+    exit
+fi
+if [ -n $2 ] && [ $2 = $nolog ] 
+then
+    zip -r $arc_file $1 > /dev/null
+else
+    zip -r $arc_file $1
+fi
+
+echo "Архивирование окончено. Создан архив " + $arc_file

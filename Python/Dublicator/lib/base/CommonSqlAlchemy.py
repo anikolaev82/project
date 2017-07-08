@@ -6,6 +6,18 @@ from sqlalchemy.orm import Mapper, sessionmaker
 import logging
 
 
+def has_connect(p_func):
+    logging.debug("Выполняется параметризованный декоратор")
+
+    def wrapper(self):
+        logging.debug("Выполняется функция обертка")
+        if self._connect is None:
+            logging.info("Соединение не создано, создаем")
+            self._connect = self._engine.connect()
+        return p_func(self)
+    return wrapper
+
+
 class CommonSqlAlchemy:
     """Общий класс для работы с SQLAlchemy"""
     _engine = None
@@ -26,19 +38,15 @@ class CommonSqlAlchemy:
         session = sessionmaker(bind=self._engine)
         self._session = session()
 
+    @has_connect
     def get_connect(self):
         """Возвращаем созданное соединение"""
         logging.info(__doc__)
-        if self._connect is None:
-            logging.info("Соединение не создано, создаем")
-            self._connect = self._engine.connect()
         return self._connect
 
+    @has_connect
     def start_transaction(self):
         logging.info("Начинаем транзакцию")
-        if self._connect is None:
-            logging.info("Соединение не создано, создаем")
-            self.get_connect()
         self._transaction = self._connect.begin()
         return self._transaction
 
@@ -49,7 +57,7 @@ class CommonSqlAlchemy:
             self._session.commit()
             self._transaction = None
         else:
-            logging.error("Производим commit")
+            logging.error("Ошибка, транзакция не была создана")
 
     def create_tables_ddl(self, p_list_ddl):
         logging.info("Создаем таблицы через Data Definition Language")

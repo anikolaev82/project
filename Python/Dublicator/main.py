@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     queue = Queue()
     start_time = time.time()
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
                         #format=u'%(filename)s[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s',
                         #filename="dublicator.log")
     logging.info("Запущен {0}".format(__name__))
@@ -48,13 +48,10 @@ if __name__ == "__main__":
     pool.map(thread, list_file)
     pool.close()
     pool.join()
-
-
-
     end_time = time.time()
     print("the end time = {0}".format(end_time - start_time))
     logging.info("select")
 
-    for l_iter in conn_db._session.query(uTree).distinct(uTree.hash).order_by(uTree.id):
-        logging.info(l_iter.name)
+#    for l_iter in conn_db._session.query(uTree).distinct(uTree.hash).order_by(uTree.id):
+ #       logging.info(l_iter.name)
 

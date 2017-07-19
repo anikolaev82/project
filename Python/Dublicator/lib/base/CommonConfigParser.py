@@ -8,7 +8,7 @@ import logging
 
 class CommonConfigParser:
     """Базовый класс для чтения записи файла настроек"""
-
+    # Классовые переменные, доступны всем экземплярам
     _config = None
     _config_name = "etc/settings.config"
     _config_file = None

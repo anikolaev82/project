@@ -20,6 +20,7 @@ def has_connect(p_func):
 
 class CommonSqlAlchemy:
     """Общий класс для работы с SQLAlchemy"""
+    #Классовые переменные, доступны всем экземплярам
     _engine = None
     _metadata = None
     _connect = None

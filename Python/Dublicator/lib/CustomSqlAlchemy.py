@@ -30,3 +30,6 @@ class CustomSqlAlchemy(CommonSqlAlchemy):
                             #Column("property", Integer, ForeignKey('prop_file.id'))
                         )
         self._metadata.create_all(self._engine)
+
+    def get_view_dublicate(self):
+        return Table('files_dublicate', self._metadata, autoload_with=self._engine)

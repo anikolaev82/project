@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf8
 # create project Сб апр 29 21:40:07 EET 2017 by user anikolaev82
-from lib.base.CommonSqlAlchemy import CommonSqlAlchemy
 from lib.CustomSqlAlchemy import CustomSqlAlchemy
 from lib.Util import Util
 from lib.MappingClass import Tree
@@ -30,18 +29,13 @@ if __name__ == "__main__":
                         #filename="dublicator.log")
     logging.info("Запущен {0}".format(__name__))
 
-    sql = CommonSqlAlchemy()
-    # sql.create_engine("sqlite:///:memory:", True)
-    sql.create_engine("sqlite:///dublicator1.db", True)
-
-    uPath = "/home/nas/Share/Video/test"
-
     conn_db = CustomSqlAlchemy()
 
     conn_db.start_transaction()
     logging.info(conn_db.get_list_tables())
 
     uTree = conn_db.mapping_exists_table(Tree, 'tree')
+
     pool = Pool()
     list_file = Util.recursion(p_path=param.source)
     logging.info(list_file)
@@ -49,9 +43,12 @@ if __name__ == "__main__":
     pool.close()
     pool.join()
     end_time = time.time()
-    print("the end time = {0}".format(end_time - start_time))
-    logging.info("select")
+    logging.info("the end time = {0}".format(end_time - start_time))
 
-#    for l_iter in conn_db._session.query(uTree).distinct(uTree.hash).order_by(uTree.id):
- #       logging.info(l_iter.name)
-
+    logging.debug(param.action)
+    if param.action == 'move':
+        Util.move(conn_db)
+    elif param.action == 'delete':
+        Util.delete(conn_db)
+    elif param.action == 'show':
+        Util.show(conn_db)
